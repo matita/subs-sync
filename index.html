@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Subs sync</title>
+
+    <style>
+      html, body { padding: 0; margin: 0; }
+
+      .main {
+        display: flex;
+      }
+
+      .subContainer {
+        position: relative;
+        width: 40%;
+      }
+
+      .sub-item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        border-top: 1px solid #eee;
+        padding: .5em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="subContainer sub1"></div>
+      <div class="subContainer sub2"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script>
+      loadSub('test/sub1.json', '.sub1');
+      loadSub('test/sub2.json', '.sub2');
+
+
+      function loadSub(file, selector, callback) {
+        $.getJSON(file, function(subs) {
+          $(selector).html(subs.map(tmplSub));
+          
+          if (callback)
+            callback(subs);
+        });
+
+
+        function tmplSub(sub) {
+          var factor = 0.02;
+          return '<div class="sub-item" style="transform: translate(0, ' + (sub.startMs*factor) + 'px)">' +
+              sub.text.replace(/\n/g, '<br>') +
+            '</div>';
+        }  
+      }
+    </script>
+  </body>
+</html>
